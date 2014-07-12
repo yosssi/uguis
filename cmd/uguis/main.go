@@ -86,4 +86,14 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	// Create a database read writer.
+	dbRW := uguis.NewSimpleDBReadWriter(db, nil)
+
+	// Defer the call of the database read writer's close method.
+	defer func() {
+		if err := dbRW.Close(); err != nil {
+			panic(err)
+		}
+	}()
 }
