@@ -1,4 +1,1 @@
-uguis
-=====
-
-Tweet音声読み上げツール
+# Uguis - Twitter音声読み上げツール
