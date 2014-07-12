@@ -107,4 +107,15 @@ func main() {
 			panic(err)
 		}
 	}()
+
+	// Create a file writer.
+	fW := uguis.NewSimpleFileWriter(app, lgr, nil)
+
+	// Defer the call of the file writer's close method.
+	defer func() {
+		if err := fW.Close(); err != nil {
+			panic(err)
+		}
+	}()
+
 }

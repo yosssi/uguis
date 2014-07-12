@@ -26,7 +26,7 @@ func (lgr *simpleLogger) Print(lg Log) {
 
 // Close closes the log channel.
 func (lgr *simpleLogger) Close() error {
-	// Close the log channle.
+	// Close the log channel.
 	close(lgr.logC)
 
 	// Wait until the print log goroutine is closed.

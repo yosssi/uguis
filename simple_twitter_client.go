@@ -35,7 +35,7 @@ func (c *simpleTwitterClient) Call(req twitterRequest) {
 
 // Close closes the twitter client.
 func (c *simpleTwitterClient) Close() error {
-	// Close the request channle.
+	// Close the request channel.
 	close(c.reqC)
 
 	// Wait until the call goroutine is closed.
