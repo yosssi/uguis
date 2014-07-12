@@ -40,7 +40,7 @@ func (ctrl *Controller) Exec() {
 
 	// Call the Twitter API.
 	params := map[string]string{
-		"count": "200",
+		"count": "20",
 	}
 	for {
 		if sinceID := ctrl.getTwitterSinceID(); sinceID != "" {
