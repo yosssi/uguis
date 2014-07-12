@@ -18,6 +18,7 @@ func main() {
 	twitterAPISecret := flag.String("twitter-api-secret", "", "Twitter API secret")
 	twitterAccessToken := flag.String("twitter-access-token", "", "Twitter access token")
 	twitterAccessTokenSecret := flag.String("twitter-access-token-secret", "", "Twitter access token secret")
+	voicetextAPIKey := flag.String("voicetext-api-key", "", "Voicetext Web API key")
 
 	flag.Parse()
 
@@ -93,6 +94,16 @@ func main() {
 	// Defer the call of the database read writer's close method.
 	defer func() {
 		if err := dbRW.Close(); err != nil {
+			panic(err)
+		}
+	}()
+
+	// Create a voicetext client.
+	voicetextClient := uguis.NewSimpleVoicetextClient(*voicetextAPIKey, app, lgr, nil)
+
+	// Defer the call of the voicetext client's close method.
+	defer func() {
+		if err := voicetextClient.Close(); err != nil {
 			panic(err)
 		}
 	}()

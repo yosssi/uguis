@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/mrjones/oauth"
-	"github.com/uguis/uguis"
 )
 
 // Twitter API URLs
@@ -64,7 +63,7 @@ func (c *simpleTwitterClient) call() {
 
 		if err != nil {
 			c.lgr.Print(NewLog(
-				uguis.LogLevelERROR,
+				LogLevelERROR,
 				c.app.Hostname,
 				serviceNameSimpleTwitterClient,
 				err.Error(),
