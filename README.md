@@ -36,13 +36,25 @@ Uguis vX.X.X
 起動時に入力するコマンドは以下の通りです。
 
 ```sh
-$ uguis -twitter-api-key=TwitterAPIキー -twitter-api-secret=TwitterAPIシークレット -twitter-access-token=Twitterアクセストークン -twitter-access-token-secret=Twitterアクセストークンシークレット -voicetext-api-key=VoiceTextAPIキー -p=音声ファイル再生コマンド
+$ uguis \
+-twitter-api-key=TwitterAPIキー \
+-twitter-api-secret=TwitterAPIシークレット \
+-twitter-access-token=Twitterアクセストークン \
+-twitter-access-token-secret=Twitterアクセストークンシークレット \
+-voicetext-api-key=VoiceTextAPIキー \
+-p=音声ファイル再生コマンド
 ```
 
 コマンド入力例を以下に記載します。
 
 ```sh
-uguis -twitter-api-key=aaaa -twitter-api-secret=bbbb -twitter-access-token=cccc -twitter-access-token-secret=dddd -voicetext-api-key=eeee -p=afplay
+uguis \
+-twitter-api-key=aaaa \
+-twitter-api-secret=bbbb \
+-twitter-access-token=cccc \
+-twitter-access-token-secret=dddd \
+-voicetext-api-key=eeee \
+-p=afplay
 ```
 
 ## 取得・読み上げることのできるツイート
