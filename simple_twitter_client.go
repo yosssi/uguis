@@ -24,7 +24,6 @@ type simpleTwitterClient struct {
 	reqC        chan twitterRequest
 	resC        chan TwitterResponse
 	closedReqC  chan struct{}
-	closedResC  chan struct{}
 	app         *Application
 	lgr         Logger
 }
@@ -40,12 +39,8 @@ func (c *simpleTwitterClient) Close() error {
 	// Close the request channle.
 	close(c.reqC)
 
-	// Close the response channle.
-	close(c.resC)
-
-	// Wait until all goroutines are closed.
+	// Wait until the call goroutine is closed.
 	<-c.closedReqC
-	<-c.closedResC
 
 	return nil
 }
@@ -103,7 +98,7 @@ func NewSimpleTwitterClient(
 	}
 	opts.setDefaults()
 
-	return &simpleTwitterClient{
+	c := &simpleTwitterClient{
 		consumer: oauth.NewConsumer(
 			consumerKey,
 			consumerSecret,
@@ -121,8 +116,12 @@ func NewSimpleTwitterClient(
 		reqC:       make(chan twitterRequest, opts.ReqCBfSize),
 		resC:       make(chan TwitterResponse, opts.ResCBfSize),
 		closedReqC: make(chan struct{}),
-		closedResC: make(chan struct{}),
 		app:        app,
 		lgr:        lgr,
 	}
+
+	// Launch a call goroutine.
+	go c.call()
+
+	return c
 }

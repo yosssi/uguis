@@ -66,5 +66,24 @@ func main() {
 		nil,
 	)
 
-	fmt.Println(twitterClient)
+	// Defer the call of the twitter client's close method.
+	defer func() {
+		if err := twitterClient.Close(); err != nil {
+			panic(err)
+		}
+	}()
+
+	// Create a database.
+	db, err := uguis.NewBoltDB(nil)
+
+	// Defer the call of the database's close method.
+	defer func() {
+		if err := db.Close(); err != nil {
+			panic(err)
+		}
+	}()
+
+	if err != nil {
+		panic(err)
+	}
 }
