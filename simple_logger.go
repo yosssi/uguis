@@ -8,9 +8,9 @@ import (
 // simpleLogger represents a simple logger.
 type simpleLogger struct {
 	*log.Logger
-	level   uint8
-	logC    chan Log
-	closedC chan struct{}
+	level      uint8
+	logC       chan Log
+	closedLogC chan struct{}
 }
 
 // Print sends a print signal to the print log goroutine.
@@ -30,7 +30,7 @@ func (lgr *simpleLogger) Close() error {
 	close(lgr.logC)
 
 	// Wait until the print log goroutine is closed.
-	<-lgr.closedC
+	<-lgr.closedLogC
 
 	return nil
 }
@@ -40,7 +40,9 @@ func (lgr *simpleLogger) printLog() {
 	for lg := range lgr.logC {
 		lgr.Logger.Println(lg)
 	}
-	lgr.closedC <- struct{}{}
+
+	// Send a closed signal.
+	lgr.closedLogC <- struct{}{}
 }
 
 // NewSimpleLogger creates and returns a simple logger.
@@ -53,10 +55,10 @@ func NewSimpleLogger(opts *SimpleLoggerOptions) Logger {
 
 	// Create a logger.
 	lgr := &simpleLogger{
-		Logger:  log.New(os.Stdout, "", 0),
-		level:   opts.level(),
-		logC:    make(chan Log, opts.LogCBfSize),
-		closedC: make(chan struct{}),
+		Logger:     log.New(os.Stdout, "", 0),
+		level:      opts.level(),
+		logC:       make(chan Log, opts.LogCBfSize),
+		closedLogC: make(chan struct{}),
 	}
 
 	// Launch a goroutine for printing a log.
