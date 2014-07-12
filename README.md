@@ -50,3 +50,6 @@ uguis -twitter-api-key=aaaa -twitter-api-secret=bbbb -twitter-access-token=cccc 
 * 自分のタイムラインに表示されるツイート
 * 特定のキーワードに合致するツイート（準備中）
 
+## ToDo
+
+[Issues](https://github.com/yosssi/uguis/issues)をご覧ください。
