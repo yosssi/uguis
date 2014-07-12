@@ -4,14 +4,14 @@ import "github.com/yosssi/go-voicetext"
 
 // VoicetextTTSRequest represents a voicetext request.
 type VoicetextTTSRequest struct {
-	text string
-	opts *voicetext.TTSOptions
+	tweet Tweet
+	opts  *voicetext.TTSOptions
 }
 
-// NewVoicetextTTSRequest creates and returns a a voicetext request.
-func NewVoicetextTTSRequest(text string, opts *voicetext.TTSOptions) VoicetextTTSRequest {
+// NewVoicetextTTSRequest creates and returns a voicetext request.
+func NewVoicetextTTSRequest(tweet Tweet, opts *voicetext.TTSOptions) VoicetextTTSRequest {
 	return VoicetextTTSRequest{
-		text: text,
-		opts: opts,
+		tweet: tweet,
+		opts:  opts,
 	}
 }

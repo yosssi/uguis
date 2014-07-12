@@ -1,7 +1,9 @@
 package uguis
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/mrjones/oauth"
@@ -12,6 +14,7 @@ const (
 	twitterRequestTokenURL   = "http://api.twitter.com/oauth/request_token"
 	twitterAuthorizeTokenURL = "https://api.twitter.com/oauth/authorize"
 	twitterAccessTokenURL    = "https://api.twitter.com/oauth/access_token"
+	twitterBaseURL           = "https://api.twitter.com/1.1"
 )
 
 const serviceNameSimpleTwitterClient = "simpleTwitterClient"
@@ -21,7 +24,7 @@ type simpleTwitterClient struct {
 	consumer    *oauth.Consumer
 	accessToken *oauth.AccessToken
 	reqC        chan twitterRequest
-	resC        chan TwitterResponse
+	resC        chan Tweet
 	closedReqC  chan struct{}
 	app         *Application
 	lgr         Logger
@@ -50,35 +53,59 @@ func (c *simpleTwitterClient) call() {
 		var httpRes *http.Response
 		var err error
 
+		url := twitterBaseURL + req.path
+
 		switch req.method {
 		case httpGET:
-			httpRes, err = c.consumer.Get(req.url, req.params, c.accessToken)
+			httpRes, err = c.consumer.Get(url, req.params, c.accessToken)
 		case httpPOST:
-			httpRes, err = c.consumer.Post(req.url, req.params, c.accessToken)
+			httpRes, err = c.consumer.Post(url, req.params, c.accessToken)
 		case httpDELETE:
-			httpRes, err = c.consumer.Delete(req.url, req.params, c.accessToken)
+			httpRes, err = c.consumer.Delete(url, req.params, c.accessToken)
 		default:
 			err = fmt.Errorf("req.method is invalid [req: %+v]", req)
 		}
 
 		if err != nil {
-			c.lgr.Print(NewLog(
-				LogLevelERROR,
-				c.app.Hostname,
-				serviceNameSimpleTwitterClient,
-				err.Error(),
-			))
-
+			c.logError(err)
 			continue
 		}
 
-		// TODO
-		fmt.Println(httpRes)
-		c.resC <- nil
+		// Parse the response.
+		b, err := ioutil.ReadAll(httpRes.Body)
+		httpRes.Body.Close()
+		if err != nil {
+			c.logError(err)
+			continue
+		}
+
+		var tweets Tweets
+		if err := json.Unmarshal(b, &tweets); err != nil {
+			c.logError(err)
+			continue
+		}
+
+		for i := len(tweets) - 1; i >= 0; i-- {
+			c.resC <- tweets[i]
+		}
 	}
 
 	// Send a closed signal.
 	c.closedReqC <- struct{}{}
+}
+
+// ResC returns a response channel.
+func (c *simpleTwitterClient) ResC() <-chan Tweet {
+	return c.resC
+}
+
+func (c *simpleTwitterClient) logError(err error) {
+	c.lgr.Print(NewLog(
+		LogLevelERROR,
+		c.app.Hostname,
+		serviceNameSimpleTwitterClient,
+		err.Error(),
+	))
 }
 
 // NewSimpleTwitterClient creates and returns a simple Twitter client.
@@ -113,7 +140,7 @@ func NewSimpleTwitterClient(
 			AdditionalData: nil,
 		},
 		reqC:       make(chan twitterRequest, opts.ReqCBfSize),
-		resC:       make(chan TwitterResponse, opts.ResCBfSize),
+		resC:       make(chan Tweet, opts.ResCBfSize),
 		closedReqC: make(chan struct{}),
 		app:        app,
 		lgr:        lgr,

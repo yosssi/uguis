@@ -6,6 +6,8 @@ const (
 	fileChangeTypeDelete
 )
 
+const filenameFormat = "uguis-%d"
+
 // file represents a file.
 type file struct {
 	path       string

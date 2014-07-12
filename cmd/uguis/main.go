@@ -19,6 +19,7 @@ func main() {
 	twitterAccessToken := flag.String("twitter-access-token", "", "Twitter access token")
 	twitterAccessTokenSecret := flag.String("twitter-access-token-secret", "", "Twitter access token secret")
 	voicetextAPIKey := flag.String("voicetext-api-key", "", "Voicetext Web API key")
+	playerCommand := flag.String("p", "", "Player command")
 
 	flag.Parse()
 
@@ -50,7 +51,7 @@ func main() {
 	runtime.GOMAXPROCS(app.CPUs)
 
 	lgr.Print(uguis.NewLog(
-		uguis.LogLevelINFO,
+		uguis.LogLevelDEBUG,
 		app.Hostname,
 		serviceNameMain,
 		fmt.Sprintf("The maximum number of CPUs was set to %d.", runtime.GOMAXPROCS(0)),
@@ -95,7 +96,7 @@ func main() {
 	}()
 
 	// Create a player.
-	player := uguis.NewSimplePlayer(app, lgr, nil)
+	player := uguis.NewSimplePlayer(*playerCommand, app, lgr, nil)
 
 	// Defer the call of the player's close method.
 	defer func() {

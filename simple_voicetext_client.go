@@ -8,7 +8,7 @@ const serviceNameSimpleVoicetextClient = "simpleVoicetextClient"
 type simpleVoicetextClient struct {
 	voicetext.Client
 	reqC       chan VoicetextTTSRequest
-	resC       chan *voicetext.Result
+	resC       chan VoicetextTTSResponse
 	closedReqC chan struct{}
 	app        *Application
 	lgr        Logger
@@ -31,10 +31,15 @@ func (c *simpleVoicetextClient) Close() error {
 	return nil
 }
 
+// ResC returns a response channel.
+func (c *simpleVoicetextClient) ResC() <-chan VoicetextTTSResponse {
+	return c.resC
+}
+
 // tts calls a voicetext API.
 func (c *simpleVoicetextClient) tts() {
 	for req := range c.reqC {
-		result, err := c.Client.TTS(req.text, req.opts)
+		result, err := c.Client.TTS(req.tweet.Text, req.opts)
 
 		if err != nil {
 			c.lgr.Print(NewLog(
@@ -47,7 +52,7 @@ func (c *simpleVoicetextClient) tts() {
 			continue
 		}
 
-		c.resC <- result
+		c.resC <- NewVoicetextTTSResponse(req.tweet, result)
 	}
 
 	// Send a closed signal.
@@ -70,7 +75,7 @@ func NewSimpleVoicetextClient(
 	c := &simpleVoicetextClient{
 		Client:     voicetext.NewClient(apiKey, nil),
 		reqC:       make(chan VoicetextTTSRequest, opts.ReqCBfSize),
-		resC:       make(chan *voicetext.Result, opts.ResCBfSize),
+		resC:       make(chan VoicetextTTSResponse, opts.ResCBfSize),
 		closedReqC: make(chan struct{}),
 		app:        app,
 		lgr:        lgr,

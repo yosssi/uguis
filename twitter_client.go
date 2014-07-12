@@ -6,4 +6,6 @@ type TwitterClient interface {
 	Call(req twitterRequest)
 	// Close closes the twitter client.
 	Close() error
+	// ResC returns a response channel.
+	ResC() <-chan Tweet
 }

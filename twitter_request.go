@@ -12,16 +12,16 @@ type twitterRequest struct {
 	// method represents an HTTP request.
 	method string
 	// url represents an URL.
-	url string
+	path string
 	// params represents request parameters.
 	params map[string]string
 }
 
 // newTwitterRequest creates and returns a request for a Twitter API.
-func newTwitterRequest(method string, url string, params map[string]string) twitterRequest {
+func newTwitterRequest(method string, path string, params map[string]string) twitterRequest {
 	return twitterRequest{
 		method: method,
-		url:    url,
+		path:   path,
 		params: params,
 	}
 }

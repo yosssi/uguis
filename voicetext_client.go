@@ -6,4 +6,6 @@ type VoicetextClient interface {
 	TTS(req VoicetextTTSRequest)
 	// Close closes the twitter client.
 	Close() error
+	// ResC returns a response channel.
+	ResC() <-chan VoicetextTTSResponse
 }
