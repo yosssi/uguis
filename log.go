@@ -43,7 +43,7 @@ type Log struct {
 	// Level represents a log level.
 	Level uint8
 	// AppName represents an application name which creates the log.
-	AppName string
+	Hostname string
 	// ServiceName represents a service name which creates the log.
 	ServiceName string
 	// Msg represents a log message.
@@ -56,7 +56,7 @@ type Log struct {
 func (lg Log) String() string {
 	return fmt.Sprintf(
 		"[%s][%s][%s][%s] %s",
-		lg.AppName,
+		lg.Hostname,
 		lg.Time.Format(logTimeLayout),
 		logLevelStrs[lg.Level],
 		lg.ServiceName,
@@ -65,10 +65,10 @@ func (lg Log) String() string {
 }
 
 // NewLog creates and returns a log.
-func NewLog(level uint8, appName string, serviceName string, msg string) Log {
+func NewLog(level uint8, hostname string, serviceName string, msg string) Log {
 	return Log{
 		Level:       level,
-		AppName:     appName,
+		Hostname:    hostname,
 		ServiceName: serviceName,
 		Msg:         msg,
 		Time:        time.Now(),
