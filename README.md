@@ -27,13 +27,9 @@ Uguis vX.X.X
 
 以下APIの認証情報を取得してください。
 
-* [Twitter REST API](https://dev.twitter.com/)
+* [Twitter REST API](https://dev.twitter.com/)（取得する認証情報：APIキー、APIシークレット、アクセストークン、アクセストークンシークレット）
 
-取得する認証情報：APIキー、APIシークレット、アクセストークン、アクセストークンシークレット
-
-* [VoiceText Web API](https://cloud.voicetext.jp/webapi)
-
-取得する認証情報：APIキー
+* [VoiceText Web API](https://cloud.voicetext.jp/webapi)（取得する認証情報：APIキー）
 
 ## 起動方法
 
