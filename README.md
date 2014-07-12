@@ -14,8 +14,12 @@ Uguisは、Twitterのツイートを自動的に取得して音声で読み上�
 
 ```sh
 $ go get github.com/yosssi/uguis/...
+```
 
-# インストールが正常に実施されたことを確認する。
+### インストールが正常に実施されたことの確認
+
+```sh
 $ uguis -v
 Uguis vX.X.X
 ```
+
