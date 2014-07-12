@@ -74,30 +74,6 @@ func main() {
 		}
 	}()
 
-	// Create a database.
-	db, err := uguis.NewBoltDB(nil)
-
-	// Defer the call of the database's close method.
-	defer func() {
-		if err := db.Close(); err != nil {
-			panic(err)
-		}
-	}()
-
-	if err != nil {
-		panic(err)
-	}
-
-	// Create a database read writer.
-	dbRW := uguis.NewSimpleDBReadWriter(db, nil)
-
-	// Defer the call of the database read writer's close method.
-	defer func() {
-		if err := dbRW.Close(); err != nil {
-			panic(err)
-		}
-	}()
-
 	// Create a voicetext client.
 	voicetextClient := uguis.NewSimpleVoicetextClient(*voicetextAPIKey, app, lgr, nil)
 
@@ -109,13 +85,28 @@ func main() {
 	}()
 
 	// Create a file writer.
-	fW := uguis.NewSimpleFileWriter(app, lgr, nil)
+	fileWriter := uguis.NewSimpleFileWriter(app, lgr, nil)
 
 	// Defer the call of the file writer's close method.
 	defer func() {
-		if err := fW.Close(); err != nil {
+		if err := fileWriter.Close(); err != nil {
 			panic(err)
 		}
 	}()
 
+	// Create a player.
+	player := uguis.NewSimplePlayer(app, lgr, nil)
+
+	// Defer the call of the player's close method.
+	defer func() {
+		if err := player.Close(); err != nil {
+			panic(err)
+		}
+	}()
+
+	// Create a controller.
+	ctrl := uguis.NewController(app, lgr, twitterClient, voicetextClient, fileWriter, player)
+
+	// Executes the controller's main process.
+	ctrl.Exec()
 }
