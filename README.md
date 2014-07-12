@@ -2,7 +2,7 @@
 
 ## 概要
 
-Uguisは、Twitterのツイートを自動的に取得して音声で読み上げるコマンドラインツールです。[VoiceText Web API](https://cloud.voicetext.jp/webapi)を利用してテキスト情報（ツイート）を音声ファイルに変換します。
+Uguisは、Twitterのツイートを自動的に取得して音声で読み上げるコマンドラインツールです。[VoiceText Web API](https://cloud.voicetext.jp/webapi)を利用してツイートのテキスト情報を音声ファイルに変換します。
 
 ## インストール
 
