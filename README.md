@@ -48,7 +48,7 @@ $ uguis \
 コマンド入力例を以下に記載します。
 
 ```sh
-uguis \
+$ uguis \
 -twitter-api-key=aaaa \
 -twitter-api-secret=bbbb \
 -twitter-access-token=cccc \
