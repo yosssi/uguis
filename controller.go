@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"sync"
 	"time"
+
+	"github.com/yosssi/go-voicetext"
 )
 
 const serviceNameController = "Controller"
@@ -62,7 +64,9 @@ func (ctrl *Controller) listenTwitterClient() {
 		ctrl.setTwitterSinceID(tweet.IDStr)
 
 		// Call the Voicetext API.
-		ctrl.voicetextClient.TTS(NewVoicetextTTSRequest(tweet, nil))
+		ctrl.voicetextClient.TTS(NewVoicetextTTSRequest(tweet, &voicetext.TTSOptions{
+			Speed: 110,
+		}))
 	}
 }
 
